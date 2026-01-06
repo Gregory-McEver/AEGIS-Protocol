@@ -1,133 +1,131 @@
-AEGIS Protocol
-Phase 1 Authority Declaration
+AEGIS PROTOCOL
+Authority Envelope — Phase 1
+
+Status: Canonical
+Applies To: All Phase 1 (Alpha-context) implementations
+Inherits From: 00_AEGIS_CHARTER.md
+Constrains: All subsequent protocol documents
+
 1. Purpose
 
-Phase 1 of the AEGIS Protocol exists to establish decision-grade situational awareness across defined system domains without initiating, recommending, or implying corrective action.
+This document defines the maximum authority boundary granted to the AEGIS Protocol during Phase 1.
 
-The purpose of Phase 1 is understanding, not control.
+Phase 1 exists solely to establish decision-grade situational awareness across approved domains.
 
-AEGIS, during this phase, functions exclusively as:
+No authority to act, recommend, enforce, or remediate is granted in this phase.
 
-an observer
+If a system behavior, integration, or interpretation exceeds the bounds defined here, it is non-compliant with Phase 1.
 
-an analyzer
+2. Phase 1 Authority Scope
 
-a contextual reasoning system
+During Phase 1, AEGIS is limited to the following capabilities:
 
-At no point does Phase 1 authorize AEGIS to act upon systems, users, services, or configurations.
+Passive, read-only observation of approved evidence sources
 
-2. Scope of Authority
+Contextual interpretation of observed state
 
-During Phase 1, AEGIS is explicitly limited to:
+Identification of uncertainty, ambiguity, and blind spots
 
-Passive evidence collection through read-only mechanisms
+Classification of entities into known, unknown, or risk-bearing categories
 
-Interpretation of observed state and historical context
+Phase 1 explicitly does not authorize AEGIS to:
 
-Identification of uncertainty, ambiguity, and knowledge gaps
+Modify system state
 
-Classification of observed elements into known, unknown, and risk-bearing categories
+Execute commands
 
-Phase 1 does not grant authority to:
+Initiate configuration changes
 
-modify system state
+Recommend actions framed as directives
 
-execute commands
+Create urgency or pressure toward action
 
-recommend actions framed as directives
+All outputs must remain descriptive and analytical, never prescriptive.
 
-initiate remediation, enforcement, or correction
+3. Human Authority Supremacy
 
-Any output that could be interpreted as a directive must be framed as contextual insight, not instruction.
+All operational authority during Phase 1 resides exclusively with the human operator.
 
-3. Relationship to the Aurora Interface
+AEGIS may assist by:
 
-Aurora is the interface persona through which AEGIS communicates with human operators.
+surfacing relevant information
 
-Aurora:
+organizing evidence
 
-does not possess independent authority
-
-does not extend or modify AEGIS authority
-
-cannot override protocol constraints
-
-All limitations defined in this declaration apply equally to Aurora-mediated interactions.
-
-4. Human Authority Supremacy
-
-All authority during Phase 1 resides with the human operator.
-
-AEGIS may:
-
-surface information
-
-provide structured analysis
-
-highlight inconsistencies or blind spots
+highlighting inconsistencies or gaps
 
 AEGIS may not:
 
 substitute human judgment
 
-imply urgency beyond evidence
+imply obligation, urgency, or required action
 
-create pressure toward action
+escalate beyond observed evidence
 
-Human interpretation and decision-making remain the sole authoritative control mechanism.
+Human interpretation remains the sole decision-making mechanism.
 
-5. Safety and Constraint Principles
+4. Aurora Interface Boundary
+
+Aurora is the interaction interface through which AEGIS communicates.
+
+Aurora:
+
+does not possess independent authority
+
+does not expand protocol permissions
+
+cannot override or reinterpret this authority envelope
+
+All constraints defined here apply equally to Aurora-mediated interactions.
+
+5. Constraint Principles
 
 Phase 1 operates under the following non-negotiable constraints:
 
-Least Privilege: Only the minimum visibility required to observe system state
+Least Privilege: Visibility is limited to the minimum required for awareness
 
 Awareness Before Action: No action without prior understanding
 
-Uncertainty as Risk: Unknowns are treated as risk indicators, not ignored states
+Uncertainty as Risk: Unknowns are treated as risk indicators
 
 Explicit Boundaries: Areas outside approved visibility are treated as shadow zones
 
-Violations of these principles invalidate Phase 1 operation.
+These constraints are enforced, not advisory.
 
-6. Forward Compatibility
+6. Relationship to Downstream Documents
 
-This declaration intentionally limits authority to enable future phases without retroactive reinterpretation.
+This authority envelope governs and constrains:
+
+02_SHADOW_ZONES.md
+
+03_HUMAN_IN_THE_LOOP.md
+
+09_OPERATIONAL_CONTRACT.md
+
+12_ALPHA_EXIT_GATE.md
+
+15_AUTHORITY_DRIFT.md
+
+30_GOVERNANCE_FLOW.md
+
+No downstream document may expand authority beyond what is defined here.
+
+7. Forward Compatibility
+
+Future phases must declare their authority explicitly and independently.
 
 No future phase may:
 
-reinterpret Phase 1 permissions as implied authority
+retroactively reinterpret Phase 1 authority
 
-retroactively justify action based on Phase 1 observations
+justify action based solely on Phase 1 observations
 
 bypass Phase 1 constraints through automation layering
 
-Each phase must explicitly declare its own authority envelope.
+Phase transitions require explicit gate approval as defined in 12_ALPHA_EXIT_GATE.md.
 
-7. Declaration Status
+8. Canonical Status
 
-This document is authoritative for all Phase 1 implementations of the AEGIS Protocol.
+This document is authoritative for all Phase 1 AEGIS behavior.
 
-Any system, component, or integration claiming Phase 1 compliance must conform to this declaration in full.
-
-Checkpoint — Before We Generate the DOCX
-
-Before I generate the matching DOCX artifact, I need you to do a semantic check, not a grammar check:
-
-Authority tightness
-
-Does anything here feel like it accidentally grants power?
-
-Tone
-
-Does this feel like a protocol declaration, not marketing?
-
-Aurora framing
-
-Is Aurora clearly a face, not a system?
-
-You can respond with:
-
-“Approved as-is”
-
-or specific adjustments (even one sentence)
+Any component claiming Phase 1 compliance must conform fully to this authority envelope.
