@@ -14,7 +14,6 @@ on:
 jobs:
   notify:
     runs-on: ubuntu-latest
-
     steps:
       - name: Post GitHub event to Discord
         env:
@@ -32,16 +31,17 @@ jobs:
           EVENT="${GITHUB_EVENT_NAME}"
           ACTION="$(jq -r '.action // ""' "$GITHUB_EVENT_PATH")"
 
-          sanitize() {
-            python3 - "$1" <<'PY'
-          import sys
-          s = sys.argv[1] if len(sys.argv) > 1 else ""
-          s = s.replace("\r", "")
-          s = s.replace("```", "``\u200b`")
-            if len(s) > 900:
-              s = s[:900] + "…"
-            print(s)
-          PY
+          # ---- helpers ----
+          # escape triple backticks so Discord code blocks don't break
+          # trim to 900 chars to stay safely under Discord embed field limits
+          clean_text() {
+            jq -r --arg path "$1" '
+              (getpath($path | split(".")) // "") 
+              | tostring
+              | gsub("\r"; "")
+              | gsub("```"; "``\u200b`")
+              | if length > 900 then .[0:900] + "…" else . end
+            ' "$GITHUB_EVENT_PATH"
           }
 
           post_embed() {
@@ -52,9 +52,7 @@ jobs:
             local field_value="$5"
 
             if [ -z "$field_value" ]; then
-              field_value="_(no text found)_"
-            else
-              field_value="```$field_value```"
+              field_value="(no text found)"
             fi
 
             payload="$(
@@ -63,7 +61,7 @@ jobs:
                 --arg url "$url" \
                 --arg description "$description" \
                 --arg field_name "$field_name" \
-                --arg field_value "$field_value" \
+                --arg field_value "```$field_value```" \
                 '{
                   embeds: [
                     {
@@ -71,11 +69,7 @@ jobs:
                       url: $url,
                       description: $description,
                       fields: [
-                        {
-                          name: $field_name,
-                          value: $field_value,
-                          inline: false
-                        }
+                        { name: $field_name, value: $field_value, inline: false }
                       ]
                     }
                   ]
@@ -85,43 +79,41 @@ jobs:
             curl -sS -H "Content-Type: application/json" -X POST -d "$payload" "$WEBHOOK" >/dev/null
           }
 
+          # ---- event routing ----
           case "$EVENT" in
             issue_comment)
               NUM="$(jq -r '.issue.number' "$GITHUB_EVENT_PATH")"
-              TITLE="$(jq -r '.issue.title' "$GITHUB_EVENT_PATH")"
+              ITITLE="$(jq -r '.issue.title' "$GITHUB_EVENT_PATH")"
               AUTHOR="$(jq -r '.comment.user.login' "$GITHUB_EVENT_PATH")"
               URL="$(jq -r '.comment.html_url' "$GITHUB_EVENT_PATH")"
-              BODY_RAW="$(jq -r '.comment.body // ""' "$GITHUB_EVENT_PATH")"
-              BODY="$(sanitize "$BODY_RAW")"
+              BODY="$(clean_text 'comment.body')"
 
-              DESC="[#${NUM}] ${TITLE}\nby **${AUTHOR}**"
+              DESC="[#${NUM}] ${ITITLE}\nby **${AUTHOR}**"
               post_embed "🛡️ AEGIS — Issue Comment ${ACTION}" "$URL" "$DESC" "Comment" "$BODY"
               ;;
 
             issues)
               NUM="$(jq -r '.issue.number' "$GITHUB_EVENT_PATH")"
-              TITLE="$(jq -r '.issue.title' "$GITHUB_EVENT_PATH")"
+              ITITLE="$(jq -r '.issue.title' "$GITHUB_EVENT_PATH")"
               AUTHOR="$(jq -r '.sender.login' "$GITHUB_EVENT_PATH")"
               URL="$(jq -r '.issue.html_url' "$GITHUB_EVENT_PATH")"
               STATE="$(jq -r '.issue.state' "$GITHUB_EVENT_PATH")"
-              BODY_RAW="$(jq -r '.issue.body // ""' "$GITHUB_EVENT_PATH")"
-              BODY="$(sanitize "$BODY_RAW")"
+              BODY="$(clean_text 'issue.body')"
 
-              DESC="[#${NUM}] ${TITLE}\nby **${AUTHOR}** • state: **${STATE}**"
+              DESC="[#${NUM}] ${ITITLE}\nby **${AUTHOR}** • state: **${STATE}**"
               post_embed "🛡️ AEGIS — Issue ${ACTION}" "$URL" "$DESC" "Body" "$BODY"
               ;;
 
             pull_request)
               NUM="$(jq -r '.pull_request.number' "$GITHUB_EVENT_PATH")"
-              TITLE="$(jq -r '.pull_request.title' "$GITHUB_EVENT_PATH")"
+              PTITLE="$(jq -r '.pull_request.title' "$GITHUB_EVENT_PATH")"
               AUTHOR="$(jq -r '.pull_request.user.login' "$GITHUB_EVENT_PATH")"
               URL="$(jq -r '.pull_request.html_url' "$GITHUB_EVENT_PATH")"
-              BRANCH="$(jq -r '.pull_request.head.ref' "$GITHUB_EVENT_PATH")"
+              HEAD="$(jq -r '.pull_request.head.ref' "$GITHUB_EVENT_PATH")"
               BASE="$(jq -r '.pull_request.base.ref' "$GITHUB_EVENT_PATH")"
-              BODY_RAW="$(jq -r '.pull_request.body // ""' "$GITHUB_EVENT_PATH")"
-              BODY="$(sanitize "$BODY_RAW")"
+              BODY="$(clean_text 'pull_request.body')"
 
-              DESC="[#${NUM}] ${TITLE}\nby **${AUTHOR}**\n→ **${BRANCH}** into **${BASE}**"
+              DESC="[#${NUM}] ${PTITLE}\nby **${AUTHOR}**\n→ **${HEAD}** into **${BASE}**"
               post_embed "🛡️ AEGIS — Pull Request ${ACTION}" "$URL" "$DESC" "Body" "$BODY"
               ;;
 
@@ -130,8 +122,7 @@ jobs:
               TAG="$(jq -r '.release.tag_name // ""' "$GITHUB_EVENT_PATH")"
               AUTHOR="$(jq -r '.release.author.login // .sender.login // "unknown"' "$GITHUB_EVENT_PATH")"
               URL="$(jq -r '.release.html_url' "$GITHUB_EVENT_PATH")"
-              NOTES_RAW="$(jq -r '.release.body // ""' "$GITHUB_EVENT_PATH")"
-              NOTES="$(sanitize "$NOTES_RAW")"
+              NOTES="$(clean_text 'release.body')"
 
               if [ -n "$TAG" ]; then
                 DESC="**${NAME}** (`${TAG}`)\nby **${AUTHOR}**"
@@ -144,7 +135,7 @@ jobs:
 
             workflow_dispatch)
               URL="https://github.com/${GITHUB_REPOSITORY}/actions"
-              DESC="Manual test fired successfully.\nIf you see this, webhook + secret are working."
+              DESC="Manual test fired successfully.\nWebhook + secret are working."
               post_embed "🧪 AEGIS — Manual Test" "$URL" "$DESC" "Status" "OK"
               ;;
 
