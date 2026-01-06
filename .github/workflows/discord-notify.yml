@@ -34,14 +34,14 @@ jobs:
 
           sanitize() {
             python3 - "$1" <<'PY'
-import sys
-s = sys.argv[1] if len(sys.argv) > 1 else ""
-s = s.replace("\r", "")
-s = s.replace("```", "``\u200b`")
-if len(s) > 900:
-    s = s[:900] + "…"
-print(s)
-PY
+          import sys
+          s = sys.argv[1] if len(sys.argv) > 1 else ""
+          s = s.replace("\r", "")
+          s = s.replace("```", "``\u200b`")
+            if len(s) > 900:
+              s = s[:900] + "…"
+            print(s)
+          PY
           }
 
           post_embed() {
