@@ -18,38 +18,131 @@ jobs:
     steps:
       - name: Post GitHub event to Discord
         env:
-          DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
+          DISCORD_WEBHOOK_RAW: ${{ secrets.DISCORD_WEBHOOK }}
         run: |
           set -euo pipefail
 
-          if [ -z "${DISCORD_WEBHOOK:-}" ]; then
+          if [ -z "${DISCORD_WEBHOOK_RAW:-}" ]; then
             echo "DISCORD_WEBHOOK secret is empty or not set."
             exit 2
           fi
 
-          # Pull key fields from the GitHub event payload
-          ACTION="$(jq -r '.action // ""' "$GITHUB_EVENT_PATH")"
-          URL="$(jq -r '.issue.html_url // .pull_request.html_url // .release.html_url // .repository.html_url // ""' "$GITHUB_EVENT_PATH")"
-          TITLE="$(jq -r '.issue.title // .pull_request.title // .release.name // "(no title)"' "$GITHUB_EVENT_PATH")"
+          # Clean webhook URL (remove CR/LF)
+          DISCORD_WEBHOOK="$(printf '%s' "$DISCORD_WEBHOOK_RAW" | tr -d '\r\n')"
+
+          case "$DISCORD_WEBHOOK" in
+            https://discord.com/api/webhooks/*|https://discordapp.com/api/webhooks/*) ;;
+            *)
+              echo "DISCORD_WEBHOOK does not look like a Discord webhook URL."
+              exit 3
+              ;;
+          esac
 
           EVENT_NAME="${GITHUB_EVENT_NAME}"
           ACTOR="${GITHUB_ACTOR}"
           REPO="${GITHUB_REPOSITORY}"
+          ACTION="$(jq -r '.action // ""' "$GITHUB_EVENT_PATH")"
 
-          CONTENT="**${EVENT_NAME} → ${ACTION}**\n**Repo:** ${REPO}\n**Title:** ${TITLE}\n**By:** ${ACTOR}\n${URL}"
+          # Helper: truncate long text safely
+          trunc() {
+            # usage: trunc "text" 300
+            local s="$1"
+            local n="${2:-300}"
+            # normalize CRLF, keep newlines, then truncate
+            s="$(printf '%s' "$s" | tr -d '\r')"
+            if [ "${#s}" -le "$n" ]; then
+              printf '%s' "$s"
+            else
+              printf '%s…' "${s:0:$n}"
+            fi
+          }
+
+          # Build event-specific details
+          TITLE=""
+          URL=""
+          DETAILS=""
+
+          if [ "$EVENT_NAME" = "issue_comment" ]; then
+            TITLE="$(jq -r '.issue.title // "(no title)"' "$GITHUB_EVENT_PATH")"
+            URL="$(jq -r '.comment.html_url // .issue.html_url // ""' "$GITHUB_EVENT_PATH")"
+            COMMENTER="$(jq -r '.comment.user.login // ""' "$GITHUB_EVENT_PATH")"
+            BODY_RAW="$(jq -r '.comment.body // ""' "$GITHUB_EVENT_PATH")"
+            BODY="$(trunc "$BODY_RAW" 600)"
+
+            DETAILS="$(cat <<EOF
+**Comment by:** ${COMMENTER}
+**Comment:**
+${BODY}
+EOF
+)"
+          elif [ "$EVENT_NAME" = "issues" ]; then
+            TITLE="$(jq -r '.issue.title // "(no title)"' "$GITHUB_EVENT_PATH")"
+            URL="$(jq -r '.issue.html_url // ""' "$GITHUB_EVENT_PATH")"
+            STATE="$(jq -r '.issue.state // ""' "$GITHUB_EVENT_PATH")"
+            BODY_RAW="$(jq -r '.issue.body // ""' "$GITHUB_EVENT_PATH")"
+            BODY="$(trunc "$BODY_RAW" 500)"
+
+            DETAILS="$(cat <<EOF
+**State:** ${STATE}
+**Issue body:**
+${BODY}
+EOF
+)"
+          elif [ "$EVENT_NAME" = "pull_request" ]; then
+            TITLE="$(jq -r '.pull_request.title // "(no title)"' "$GITHUB_EVENT_PATH")"
+            URL="$(jq -r '.pull_request.html_url // ""' "$GITHUB_EVENT_PATH")"
+            PR_STATE="$(jq -r '.pull_request.state // ""' "$GITHUB_EVENT_PATH")"
+            PR_NUM="$(jq -r '.pull_request.number // ""' "$GITHUB_EVENT_PATH")"
+            PR_BODY_RAW="$(jq -r '.pull_request.body // ""' "$GITHUB_EVENT_PATH")"
+            PR_BODY="$(trunc "$PR_BODY_RAW" 500)"
+
+            DETAILS="$(cat <<EOF
+**PR:** #${PR_NUM} (${PR_STATE})
+**Description:**
+${PR_BODY}
+EOF
+)"
+          elif [ "$EVENT_NAME" = "release" ]; then
+            TITLE="$(jq -r '.release.name // .release.tag_name // "(no title)"' "$GITHUB_EVENT_PATH")"
+            URL="$(jq -r '.release.html_url // ""' "$GITHUB_EVENT_PATH")"
+            TAG="$(jq -r '.release.tag_name // ""' "$GITHUB_EVENT_PATH")"
+            REL_BODY_RAW="$(jq -r '.release.body // ""' "$GITHUB_EVENT_PATH")"
+            REL_BODY="$(trunc "$REL_BODY_RAW" 700)"
+
+            DETAILS="$(cat <<EOF
+**Tag:** ${TAG}
+**Release notes:**
+${REL_BODY}
+EOF
+)"
+          else
+            TITLE="(unhandled event)"
+            URL="$(jq -r '.repository.html_url // ""' "$GITHUB_EVENT_PATH")"
+            DETAILS="(No details parser for this event.)"
+          fi
+
+          HEADER="**${REPO}** — ${EVENT_NAME} → **${ACTION}**"
+          META="$(cat <<EOF
+**Title:** ${TITLE}
+**By:** ${ACTOR}
+${URL}
+EOF
+)"
+
+          # IMPORTANT: preserve real newlines by passing content as raw string to jq
+          CONTENT="$(cat <<EOF
+${HEADER}
+${META}
+
+${DETAILS}
+EOF
+)"
 
           PAYLOAD="$(jq -n --arg content "$CONTENT" '{content: $content}')"
 
-          echo "Webhook set: True"
-          echo "Event: ${EVENT_NAME} Action: ${ACTION}"
-          echo "Repo: ${REPO}"
-          echo "Payload bytes: $(printf '%s' "$PAYLOAD" | wc -c | tr -d ' ')"
-          echo "Target URL present: $( [ -n "$URL" ] && echo True || echo False )"
-
-          # Post to Discord (User-Agent is important to avoid Cloudflare 1010 blocks)
           curl -sS --fail-with-body \
             -H "Content-Type: application/json" \
-            -H "User-Agent: GitHubActions-AEGIS/1.0 (+https://github.com/${REPO})" \
+            -H "User-Agent: GitHubActions-AEGIS/1.0 (+https://github.com/'"$REPO"' )" \
             -X POST \
             -d "$PAYLOAD" \
             "$DISCORD_WEBHOOK"
