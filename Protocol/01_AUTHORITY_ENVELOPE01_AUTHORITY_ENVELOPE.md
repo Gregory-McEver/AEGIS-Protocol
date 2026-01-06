@@ -1,33 +1,3 @@
-Status: Draft for review
-Canonical Target:
-docs/01-authority/01-phase-1-authority-declaration.md
-
-Source Artifact (preserved verbatim):
-Aurora_Phase_1_Authority_Declaration_v1.0.docx
-
-Intent of This Document (Why it exists)
-
-This document establishes the maximum authority envelope of AEGIS during Phase 1.
-
-Everything else in the system:
-
-evidence collection
-
-reasoning depth
-
-operator interaction
-
-future automation prohibitions
-
-inherits from this declaration.
-
-If a future component contradicts this document, the component is wrong.
-
-Draft: AEGIS Phase 1 Authority Declaration
-
-Below is the proposed canonical text, translated carefully from the Aurora original with naming normalization only.
-No new powers are added. No authority is expanded.
-
 AEGIS Protocol
 Phase 1 Authority Declaration
 1. Purpose
