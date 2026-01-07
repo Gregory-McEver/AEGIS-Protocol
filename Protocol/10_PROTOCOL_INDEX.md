@@ -4,6 +4,15 @@ This document is the canonical navigation map for the AEGIS Protocol.
 
 AEGIS is not a product — it is a governance framework that defines how intelligent systems are allowed to observe, reason, and act inside bounded authority.
 
+
+## Installer Roles
+
+| Role | Document |
+|------|----------|
+| AEGIS CORE Install | `BETA_INSTALLER_REQUIREMENTS.md` |
+| AEGIS PAGE Install | `BETA_INSTALLER_REQUIREMENTS.md` |
+
+
 ---
 
 ## Core Principles
