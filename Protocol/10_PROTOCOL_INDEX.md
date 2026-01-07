@@ -17,6 +17,7 @@ AEGIS is not a product — it is a governance framework that defines how intelli
 | Cognitive Questions | `05_COGNITIVE_QUESTIONS.md` |
 | Evidence vs Inference | `06_EVIDENCE_VS_INFERENCE.md` |
 | Incident Feedback Loop | `governance/INCIDENT_FEEDBACK_LOOP.md` |
+| Sight Triad (Sight / Foresight / Hindsight) | `06_SIGHT_TRIAD.md` |
 
 
 ---
