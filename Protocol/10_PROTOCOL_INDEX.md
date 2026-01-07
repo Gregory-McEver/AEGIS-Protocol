@@ -31,6 +31,8 @@ AEGIS is not a product — it is a governance framework that defines how intelli
 | Escalation Ladder | `32_INCIDENT_ESCALATION_LADDER.md` |
 | Boundary Map | `33_BOUNDARY_MAP.md` |
 | Drift Response Framework | `governance/AUTHORITY_DRIFT_RESPONSE.md` |
+| Foresight Review Framework | `governance/FORESIGHT_REVIEW.md` |
+
 
 ---
 
