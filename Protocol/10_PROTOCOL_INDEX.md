@@ -56,6 +56,8 @@ AEGIS is not a product — it is a governance framework that defines how intelli
 | Authority Drift | `15_AUTHORITY_DRIFT.md` |
 | Drift Lifecycle | `31_AUTHORITY_DRIFT_LIFECYCLE.md` |
 | Change Envelope | `07_CHANGE_ENVELOPE.md` |
+| Authority Envelope Changelog | `governance/AUTHORITY_ENVELOPE_CHANGELOG.md` |
+
 
 ---
 
