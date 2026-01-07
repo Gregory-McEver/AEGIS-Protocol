@@ -42,6 +42,7 @@ AEGIS is not a product — it is a governance framework that defines how intelli
 | Drift Response Framework | `governance/AUTHORITY_DRIFT_RESPONSE.md` |
 | Foresight Review Framework | `governance/FORESIGHT_REVIEW.md` |
 | Governance Amendment Template | `governance/GOVERNANCE_AMENDMENT_TEMPLATE.md` |
+| PAGE Binding Protocol | `governance/PAGE_BINDING_PROTOCOL.md` |
 
 
 ---
