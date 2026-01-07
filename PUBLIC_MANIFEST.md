@@ -10,4 +10,4 @@ Aurora is an **interface**, not the project.
 - Unknown domains are treated as **risk**, not opportunity.  
 - Human escalation paths are a **feature**, not a failure.  
 
-This repository exists to **preserv**
+This repository exists to **preserve**
