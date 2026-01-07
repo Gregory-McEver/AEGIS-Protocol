@@ -1,170 +1,155 @@
-AEGIS PROTOCOL
-Change Envelope Declaration
-1. Purpose
+# AEGIS Protocol  
+## Change Envelope Declaration
 
-This document defines the Change Envelope as a bounded, descriptive construct used by AEGIS to represent observed change over time.
+---
+
+## 1. Purpose
+
+This document defines the **Change Envelope** as a bounded, descriptive construct used by AEGIS to represent observed change over time.
 
 A Change Envelope exists to:
 
-surface that a change occurred
+- Surface that a change occurred  
+- Describe the scope and timing of the change  
+- Preserve evidence fidelity  
 
-describe the scope and timing of the change
+A Change Envelope does **not** exist to:
 
-preserve evidence fidelity
+- Explain why a change occurred  
+- Assess impact or severity  
+- Recommend or imply response  
 
-A Change Envelope does not exist to:
+**Change Envelopes are descriptive artifacts, not evaluative judgments.**
 
-explain why a change occurred
+---
 
-assess impact or severity
+## 2. Definition
 
-recommend or imply response
-
-Change Envelopes are descriptive artifacts, not evaluative judgments.
-
-2. Definition
-
-A Change Envelope is a structured representation of one or more observed deltas between two system states.
+A **Change Envelope** is a structured representation of one or more observed deltas between two system states.
 
 A Change Envelope may include:
 
-identifiers of affected entities
+- Identifiers of affected entities  
+- Timestamps or observation windows  
+- Before / after representations  
+- Evidence references supporting the delta  
 
-timestamps or observation windows
+A Change Envelope may **not** include:
 
-before/after representations
+- Causal attribution  
+- Intent inference  
+- Risk scoring  
+- Prioritization language  
+- Action framing  
 
-evidence references supporting the delta
+---
 
-A Change Envelope may not include:
-
-causal attribution
-
-intent inference
-
-risk scoring
-
-prioritization language
-
-action framing
-
-3. Triggering a Change Envelope
+## 3. Triggering a Change Envelope
 
 A Change Envelope may be generated when:
 
-a previously observed attribute differs from a later observation
+- A previously observed attribute differs from a later observation  
+- An entity appears, disappears, or materially changes state  
+- Evidence collection reveals inconsistency across time  
+- Classification status changes due to new evidence  
 
-an entity appears, disappears, or materially changes state
-
-evidence collection reveals inconsistency across time
-
-classification status changes due to new evidence
-
-Change detection alone is sufficient.
+**Change detection alone is sufficient.**  
 No significance threshold is required.
 
-4. Scope and Boundaries
+---
+
+## 4. Scope and Boundaries
 
 Change Envelopes are constrained by all existing protocol boundaries, including:
 
-protocol/01_AUTHORITY_ENVELOPE.md
-
-protocol/02_SHADOW_ZONES.md
-
-protocol/03_HUMAN_IN_THE_LOOP.md
-
-protocol/05_EVIDENCE_VS_INFERENCE.md
+- `protocol/01_AUTHORITY_ENVELOPE.md`  
+- `protocol/02_SHADOW_ZONES.md`  
+- `protocol/03_HUMAN_IN_THE_LOOP.md`  
+- `protocol/05_EVIDENCE_VS_INFERENCE.md`  
 
 If a potential change intersects a Shadow Zone, the Change Envelope must:
 
-acknowledge the boundary
+- Acknowledge the boundary  
+- Exclude the protected content  
+- Avoid inference around the hidden area  
 
-exclude the protected content
+**Change Envelopes must never be used to reason around a boundary.**
 
-avoid inference around the hidden area
+---
 
-Change Envelopes must never be used to reason around a boundary.
+## 5. Descriptive-Only Constraint
 
-5. Descriptive-Only Constraint
+Change Envelopes must remain **strictly descriptive**.
 
-Change Envelopes must remain strictly descriptive.
+AEGIS must **not**:
 
-AEGIS must not:
+- Label a change as good, bad, expected, or anomalous  
+- Infer cause or consequence  
+- Collapse multiple unrelated deltas into narrative  
+- Escalate based on change presence alone  
 
-label a change as good, bad, expected, or anomalous
+If interpretation pressure exists, AEGIS must defer to **human judgment**.
 
-infer cause or consequence
+---
 
-collapse multiple unrelated deltas into narrative
-
-escalate based on change presence alone
-
-If interpretation pressure exists, AEGIS must defer to human judgment.
-
-6. Relationship to Evidence and Classification
+## 6. Relationship to Evidence and Classification
 
 A Change Envelope:
 
-may reference evidence
+- May reference evidence  
+- May reflect classification changes  
+- May highlight uncertainty introduced by change  
 
-may reflect classification changes
+A Change Envelope may **not**:
 
-may highlight uncertainty introduced by change
+- Override evidence  
+- Justify reclassification on its own  
+- Imply that classification change is required  
 
-A Change Envelope may not:
+**Change description does not equal meaning.**
 
-override evidence
+---
 
-justify reclassification on its own
+## 7. Human Interpretation Boundary
 
-imply that classification change is required
-
-Change description does not equal meaning.
-
-7. Human Interpretation Boundary
-
-All interpretation of Change Envelopes is the responsibility of the human operator.
+All interpretation of Change Envelopes is the responsibility of the **human operator**.
 
 AEGIS may:
 
-present Change Envelopes clearly
+- Present Change Envelopes clearly  
+- Associate related evidence  
+- Surface uncertainty introduced by change  
 
-associate related evidence
+AEGIS may **not**:
 
-surface uncertainty introduced by change
+- Frame urgency  
+- Imply necessity of action  
+- Prioritize envelopes for response  
 
-AEGIS may not:
+**Change awareness is informational, not directive.**
 
-frame urgency
+---
 
-imply necessity of action
-
-prioritize envelopes for response
-
-Change awareness is informational, not directive.
-
-8. Extension Path
+## 8. Extension Path
 
 Future protocol extensions may introduce:
 
-labeled significance indicators
-
-hypothesis annotation
-
-preservation or containment modes
+- Labeled significance indicators  
+- Hypothesis annotation  
+- Preservation or containment modes  
 
 Such extensions must:
 
-explicitly declare added authority
-
-define new constraints
-
-remain subordinate to the baseline Change Envelope definition
+- Explicitly declare added authority  
+- Define new constraints  
+- Remain subordinate to the baseline Change Envelope definition  
 
 No extension may retroactively reinterpret baseline Change Envelopes.
 
-9. Canonical Status
+---
+
+## 9. Canonical Status
 
 This document is authoritative for all AEGIS Change Envelope behavior.
 
-Any system behavior that treats change as implicit justification for action constitutes authority drift.
+Any system behavior that treats change as implicit justification for action constitutes **authority drift**.
