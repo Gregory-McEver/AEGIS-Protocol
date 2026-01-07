@@ -1,0 +1,21 @@
+name: Protocol Task
+description: Work item for Alpha / Beta / GR milestones
+title: "[TASK] "
+labels: ["task"]
+body:
+  - type: textarea
+    attributes:
+      label: Task Description
+      description: What needs to be done?
+    validations:
+      required: true
+
+  - type: dropdown
+    attributes:
+      label: Phase
+      options:
+        - Alpha Exit
+        - Beta Foundation
+        - General Release
+    validations:
+      required: true
