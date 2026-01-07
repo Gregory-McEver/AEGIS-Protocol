@@ -1,0 +1,43 @@
+name: Incident / Drift Event
+description: Report a governance failure or authority drift
+title: "[INCIDENT] "
+labels: ["incident"]
+body:
+  - type: textarea
+    attributes:
+      label: What Happened
+      description: Describe the incident factually.
+    validations:
+      required: true
+
+  - type: textarea
+    attributes:
+      label: Authority Violation
+      description: Which envelope boundary was crossed?
+    validations:
+      required: true
+
+  - type: dropdown
+    attributes:
+      label: Drift Severity
+      options:
+        - D1
+        - D2
+        - D3
+        - D4
+    validations:
+      required: true
+
+  - type: textarea
+    attributes:
+      label: Immediate Remediation
+      description: What was done to stop or contain the incident?
+    validations:
+      required: true
+
+  - type: textarea
+    attributes:
+      label: Governance Changes Needed
+      description: Which documents must change to prevent recurrence?
+    validations:
+      required: true
