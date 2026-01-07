@@ -1,0 +1,42 @@
+name: Protocol Spec Change
+description: Propose a change to the AEGIS Protocol
+title: "[SPEC] "
+labels: ["governance"]
+body:
+  - type: textarea
+    attributes:
+      label: Summary of Change
+      description: What are you proposing?
+    validations:
+      required: true
+
+  - type: textarea
+    attributes:
+      label: Authority Impact
+      description: Which Authority Envelope areas are affected?
+    validations:
+      required: true
+
+  - type: dropdown
+    attributes:
+      label: Risk Tier Impact
+      options:
+        - No change
+        - Escalates risk tier
+        - Reduces risk tier
+    validations:
+      required: true
+
+  - type: textarea
+    attributes:
+      label: Drift Risk
+      description: How could this change enable authority drift?
+    validations:
+      required: true
+
+  - type: textarea
+    attributes:
+      label: Governance Amendments Required
+      description: Which protocol documents must be updated?
+    validations:
+      required: true
