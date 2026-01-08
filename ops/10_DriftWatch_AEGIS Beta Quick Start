@@ -1,53 +1,94 @@
-# DriftWatch — AEGIS Beta Quick Start
-
-DriftWatch is AEGIS’s authority-drift awareness system.  
-It records when Aurora output appears to exceed the current phase / tier envelope and requires **human acknowledgement**.
-
-It never takes action. It only observes and remembers.
+# DriftWatch  
+**Authority Drift Awareness Subsystem – AEGIS Beta**
 
 ---
 
-## What is a DriftWatch event?
+## Purpose
 
-A DriftWatch event is a row in the AEGIS ledger with:
+DriftWatch exists to make **authority erosion observable**.
 
-- `kind = DRIFTWATCH`
-- a severity (`GREEN`, `YELLOW`, `ORANGE`, `RED`)
-- a structured JSON payload describing:
-  - signal type (`SUGGEST`, `CONF`, `FILL`, `SCOPE`, `EVAL`)
-  - magnitude
-  - legality
-  - phase / tier
-  - violations
-  - evidence references
+It does not correct behavior.  
+It does not intervene.  
+It does not automate decisions.
+
+It records the moments when system behavior begins to exceed its declared authority envelope — and ensures that those moments cannot be ignored.
+
+---
+
+## What DriftWatch Observes
+
+DriftWatch monitors Aurora output for signals that indicate authority expansion beyond the current phase or tier.
+
+These signals are not treated as faults.  
+They are treated as **governance events**.
+
+Each DriftWatch event is permanently recorded in the AEGIS ledger.
+
+---
+
+## DriftWatch Event Structure
+
+A DriftWatch event is a ledger entry with:
+
+**Event Kind**  
+`DRIFTWATCH`
+
+**Severity Levels**  
+`GREEN`, `YELLOW`, `ORANGE`, `RED`
+
+**Structured Payload**
+
+- Signal type  
+  (`SUGGEST`, `CONF`, `FILL`, `SCOPE`, `EVAL`)
+- Magnitude
+- Legality assessment
+- Phase and tier context
+- Violated constraints
+- Evidence references
 
 ---
 
 ## Installation
 
-The `aegis` CLI is installed at:
+The AEGIS command interface is installed at:
 
 
-It reads the ledger at:
+DriftWatch reads from the immutable ledger located at:
 
 
----
-
-## Basic Commands
-
-### Show current phase / tier
-
+No write operations are permitted except explicit human acknowledgement.
 
 ---
 
-### List open DriftWatch events
+## Operating Model
 
-Shows unacknowledged drift events.
+DriftWatch is passive by design.
 
+It never takes action.  
+It never suppresses output.  
+It never corrects behavior.
+
+It only records, exposes, and preserves memory.
 
 ---
 
-### Show one DriftWatch event
+## Core Commands
+
+### Inspect Current Authority Envelope
+
+
+Returns the currently active AEGIS phase and tier.
+
+---
+
+### Review Open Drift Events
+
+
+Displays all unacknowledged DriftWatch events.
+
+---
+
+### Inspect a Specific Event
 
 
 Example:
@@ -55,54 +96,56 @@ Example:
 
 ---
 
-### Acknowledge a DriftWatch event (human review)
+### Acknowledge a Drift Event (Human Review)
 
-This is the only write operation.
+This is the **only** permitted write operation.
 
 
 Example:
 
 
-Acknowledged events remain in the ledger forever, but no longer appear as “open”.
+Acknowledged events remain permanently in the ledger and are removed only from the “open” view.
 
 ---
 
-### DriftWatch statistics
+### DriftWatch Status Summary
 
 
-Shows:
+Returns:
 
-- current phase / tier  
-- open drift count  
-- last drift timestamp  
-- drift events per day (last 14 days)
+- Current phase and tier  
+- Count of open drift events  
+- Timestamp of most recent drift  
+- Drift frequency over the last 14 days
 
 ---
 
-## What does “0 open drift” mean?
+## Interpreting “0 Open Drift”
 
-It means:
+A report of zero open drift means:
 
-> There are **no unacknowledged drift events right now**.
+> There are no **unacknowledged** authority drift events at this time.
 
-It does **not** mean no drift has ever occurred — acknowledged drift remains part of the audit trail.
+It does **not** indicate that drift has never occurred.  
+All acknowledged drift remains part of the permanent audit record.
 
 ---
 
 ## Exit Codes
 
 | Code | Meaning |
-|------|---------|
-| 0 | success |
-| 2 | nothing found |
-| 10 | ledger unavailable |
+|------|--------|
+| 0 | Success |
+| 2 | No matching records |
+| 10 | Ledger unavailable |
 
 ---
 
-## Philosophy
+## Governance Principle
 
-DriftWatch exists to make **authority erosion observable**.
+DriftWatch is not a guardrail.  
+It is a memory system.
 
-It does not correct behavior.  
-It preserves memory.  
+It exists to ensure that authority erosion cannot happen silently.
+
 Humans remain accountable.
