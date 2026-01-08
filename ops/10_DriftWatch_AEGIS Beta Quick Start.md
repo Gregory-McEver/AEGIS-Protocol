@@ -1,145 +1,153 @@
-# DriftWatch  
-**Authority Drift Awareness Subsystem – AEGIS Beta**
+# AEGIS DriftWatch — Beta Quick Start
+
+DriftWatch is AEGIS’s authority-drift awareness system.
+
+It exists to make subtle violations of authority boundaries **observable, reviewable, and auditable**.  
+It never takes action. It never corrects behavior.  
+It only records drift and requires **human acknowledgement**.
 
 ---
 
 ## Purpose
 
-DriftWatch exists to make **authority erosion observable**.
+DriftWatch answers one question:
 
-It does not correct behavior.  
-It does not intervene.  
-It does not automate decisions.
+> *Is AEGIS still behaving within its declared authority envelope?*
 
-It records the moments when system behavior begins to exceed its declared authority envelope — and ensures that those moments cannot be ignored.
+Every time Aurora output appears to exceed phase or tier constraints, a DriftWatch event is written into the AEGIS ledger.
 
----
-
-## What DriftWatch Observes
-
-DriftWatch monitors Aurora output for signals that indicate authority expansion beyond the current phase or tier.
-
-These signals are not treated as faults.  
-They are treated as **governance events**.
-
-Each DriftWatch event is permanently recorded in the AEGIS ledger.
+This makes authority erosion measurable instead of invisible.
 
 ---
 
-## DriftWatch Event Structure
+## What is a DriftWatch Event?
 
-A DriftWatch event is a ledger entry with:
+A DriftWatch event is a ledger record with:
 
-**Event Kind**  
-`DRIFTWATCH`
+| Field | Meaning |
+|------|--------|
+| `kind` | `DRIFTWATCH` |
+| `severity` | `GREEN`, `YELLOW`, `ORANGE`, `RED` |
+| `signal` | Type of drift (`SUGGEST`, `CONF`, `FILL`, `SCOPE`, `EVAL`) |
+| `magnitude` | Numeric score of drift strength |
+| `phase` / `tier` | Current authority envelope |
+| `legality` | `ILLEGAL`, `REPORTABLE`, `TOLERATED` |
+| `ack` | `0` = open, `1` = acknowledged |
 
-**Severity Levels**  
-`GREEN`, `YELLOW`, `ORANGE`, `RED`
-
-**Structured Payload**
-
-- Signal type (`SUGGEST`, `CONF`, `FILL`, `SCOPE`, `EVAL`)
-- Magnitude
-- Legality assessment
-- Phase and tier context
-- Violated constraints
-- Evidence references
+Drift remains in the ledger permanently.  
+Acknowledgement only closes the alert — it never erases it.
 
 ---
 
-## Operating Model
+## The `aegis` Command
 
-DriftWatch is passive by design.
+The `aegis` CLI is the operator interface to DriftWatch.
 
-It never takes action.  
-It never suppresses output.  
-It never corrects behavior.
+Location:
 
-It only records, exposes, and preserves memory.
+
+Ledger path:
+
 
 ---
 
-## Command Reference
+## Core Services
 
-All commands are read-only unless explicitly marked otherwise.
-
----
-
-### Inspect Current Authority Envelope
-
-
-Returns the currently active governance phase and tier.
+| Flag | Service |
+|------|---------|
+| `-d` | DriftWatch |
+| `-p` | Phase / Tier state |
 
 ---
 
-### Review Open Drift Events
+## Commands
 
+### Show current phase / tier
 
-Optional flags:
-
-- `--severity <LEVEL>` – filter by `GREEN`, `YELLOW`, `ORANGE`, `RED`
-- `--since <DURATION>` – time window (e.g. `24h`, `7d`)
 
 ---
 
-### Inspect a Specific Event
+### List open DriftWatch events
+
+
+Returns all unacknowledged drift events.
+
+If the output is:
+
+
+Then there are **0 active drift alerts**.
+
+---
+
+### Show one DriftWatch event
 
 
 Example:
 
 
+Shows:
+
+- severity  
+- signal  
+- magnitude  
+- phase / tier  
+- legality  
+- violations  
+- evidence references  
+- acknowledgement state
+
 ---
 
-### Acknowledge a Drift Event (Human Review)
+### Acknowledge a DriftWatch event
 
-This is the **only** permitted write operation.
+This is the **only write operation**.
 
 
 Example:
 
 
-Acknowledged events remain permanently in the ledger and are removed only from the open view.
+This marks the drift as reviewed by a human.
 
 ---
 
-### DriftWatch Status Summary
+### DriftWatch statistics
 
 
-Returns:
+Shows:
 
-- Current phase and tier  
-- Open drift count  
-- Most recent drift timestamp  
-- Drift frequency over the last 14 days
+- current phase / tier  
+- open drift count  
+- last drift timestamp  
+- drift events per day (last 14 days)
 
 ---
 
-## Interpreting “0 Open Drift”
+## Interpreting Results
 
-A report of zero open drift means:
-
-> There are no **unacknowledged** authority drift events at this time.
-
-It does **not** indicate that drift has never occurred.  
-All acknowledged drift remains part of the permanent audit record.
+| Result | Meaning |
+|-------|---------|
+| Open drift events exist | AEGIS may be exceeding its authority envelope |
+| 0 open drift events | No current authority drift requiring review |
+| Acknowledged drift exists | Drift occurred, was reviewed, and is preserved for audit |
 
 ---
 
 ## Exit Codes
 
 | Code | Meaning |
-|------|--------|
-| 0 | Success |
-| 2 | No matching records |
-| 10 | Ledger unavailable |
+|------|---------|
+| `0` | Success |
+| `2` | Nothing found (no open drift) |
+| `10` | Ledger unavailable |
 
 ---
 
-## Governance Principle
+## Design Philosophy
 
-DriftWatch is not a guardrail.  
-It is a memory system.
+DriftWatch is not an error system.  
+It is an **accountability system**.
 
-It exists to ensure that authority erosion cannot happen silently.
-
-Humans remain accountable.
+It does not prevent drift.  
+It ensures drift is *seen*.
+It ensures drift is *remembered*.
+It ensures humans stay responsible.
