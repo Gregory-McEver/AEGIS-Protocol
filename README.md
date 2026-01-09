@@ -11,7 +11,15 @@ It defines how intelligent systems are allowed to observe, reason, and act — e
 This repository is the canonical specification for AEGIS.
 
 ---
+## 📌 Start Here
 
+| Priority | Document |
+|----------|----------|
+| 🥇 | [00_README_START_HERE.md](00_README_START_HERE.md) |
+| 🥈 | [Authority Envelope](governance/Authority_Envelope.md) |
+| 🥉 | [UNKNOWN Propagation](theory/UNKNOWN_Propagation.md) |
+
+---
 ## What AEGIS Is
 
 AEGIS provides:
