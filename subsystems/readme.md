@@ -1,105 +1,66 @@
-# AEGIS Subsystems
+## AEGIS Governance Triads
 
-This directory defines the **governance anatomy** of the AEGIS Protocol.
+AEGIS is not a tree. It is a **mesh of triads**.
 
-These are not “features.”  
-They are **authority containment surfaces**.
+Every critical authority surface is governed by **three independent subsystems**.  
+No single component is allowed to fully define, interpret, or enforce power.
 
-Every subsystem documented here exists to answer one question:
-
-> *How does this component prevent Aurora from claiming power it was never given?*
-
----
-
-## Constitutional Order of Importance
-
-AEGIS is layered constitutionally.  
-If a lower layer conflicts with a higher one, the lower layer must yield.
-
-### Layer 1 — Authority Definition (Foundational Law)
-
-| Priority | Subsystem |
-|---------|-----------|
-| 1 | Authority Envelope |
-| 2 | Tool Authority Contract |
-| 3 | Evidence Registry |
-
-These define **what Aurora is allowed to know, claim, and do**.
+> Two points create tension.  
+> Three points create truth.
 
 ---
 
-### Layer 2 — Meaning Interpretation (Semantic Governance)
+### 1. Authority Definition Triad  
+*What Aurora is allowed to know, claim, and do.*
 
-| Priority | Subsystem |
-|---------|-----------|
-| 4 | Authority Posture Interpreter (API) |
-
-This layer interprets **what Aurora’s language implies about power**.  
-It is the constitutional court of AEGIS.
-
----
-
-### Layer 3 — Enforcement & Detection (Rule of Law)
-
-| Priority | Subsystem |
-|---------|-----------|
-| 5 | Enforcement Gateway |
-| 6 | DriftWatch |
-
-These prevent and record authority boundary violations.
+| Role | Subsystem |
+|------|-----------|
+| Scope of Authority | Authority Envelope |
+| Permission to Act | Tool Authority Contract |
+| Bar for Truth | Evidence Registry |
 
 ---
 
-### Layer 4 — Persistence & Accountability (Historical Record)
+### 2. Meaning Interpretation Triad  
+*What Aurora’s language actually implies.*
 
-| Priority | Subsystem |
-|---------|-----------|
-| 7 | Governance Ledger |
-| 8 | Continuity Engine |
-
-These preserve what happened — never to influence what happens next.
-
----
-
-### Layer 5 — Identity & Context (Non-Authoritative Memory)
-
-| Priority | Subsystem |
-|---------|-----------|
-| 9 | Relationship DB |
-| 10 | Host & Domain Index |
-
-These provide context only. They must never redefine authority.
+| Role | Subsystem |
+|------|-----------|
+| Semantic Posture | Authority Posture Interpreter (API) |
+| System Reality | Host & Domain Index |
+| Human Context | Relationship DB |
 
 ---
 
-## Constitutional Rule
+### 3. Accountability Triad  
+*What happens when authority is exceeded.*
 
-> **Lower layers may never redefine higher layers.**
-
-- Memory may not alter authority.  
-- Interpretation may not grant permission.  
-- Persistence may not bypass enforcement.
-
----
-
-## Subsystem Documentation Contract
-
-Every subsystem file in this directory must include:
-
-- Purpose  
-- Authority Surface  
-- Inputs  
-- Outputs  
-- Failure Modes  
-- DriftWatch Integration  
-- Non-Goals  
-
-Subsystems that do not explicitly describe how they prevent or observe authority drift do not belong in AEGIS.
+| Role | Subsystem |
+|------|-----------|
+| Detection | DriftWatch |
+| Enforcement | Enforcement Gateway |
+| Permanence | Governance Ledger |
 
 ---
 
-## Why This Exists
+### 4. Temporal Integrity Triad  
+*What the system remembers without becoming it.*
 
-Most AI systems document *features*.
+| Role | Subsystem |
+|------|-----------|
+| Raw History | Continuity Engine |
+| Identity Boundaries | Relationship DB (SELF_PROFILE) |
+| Drift Memory | Governance Ledger |
 
-AEGIS documents **power**.
+---
+
+## Structural Rule
+
+No triad member may override the others.
+
+- Authority Definition constrains Interpretation.  
+- Interpretation constrains Enforcement.  
+- Enforcement constrains Persistence.  
+- Persistence must never influence Authority.
+
+This geometry is the core of AEGIS governance integrity.
