@@ -41,9 +41,9 @@ It is the framework that governs all of the above.
 
 | Phase | Status |
 |------|--------|
-| Alpha | Active |
-| Beta | Planned |
-| General Release | Not yet approved |
+| Alpha | Complete  |
+| Beta | Active     |
+| General Release   | Not yet approved |
 
 ---
 
