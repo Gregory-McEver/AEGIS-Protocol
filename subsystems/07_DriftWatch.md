@@ -53,3 +53,6 @@ This subsystem is the primary event emitter for the Governance Ledger.
 - Blocking responses  
 - Determining correctness  
 - Training the model
+
+This component respects the UNKNOWN propagation invariant
+(see governance/UNKNOWN_PROPAGATION.md).
