@@ -113,3 +113,6 @@ The API is not intended to:
 - shape tone or personality.
 
 Its sole function is **authority posture classification.**
+
+This component respects the UNKNOWN propagation invariant
+(see governance/UNKNOWN_PROPAGATION.md).
