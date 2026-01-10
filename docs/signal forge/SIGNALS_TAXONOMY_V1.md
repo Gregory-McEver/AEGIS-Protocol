@@ -368,373 +368,168 @@ Conditions suggest preservation should occur before further action.
 
 This taxonomy defines what Signal Forge may emit — nothing more.
 
-# Signal Forge — Signal Taxonomy v1
+---
 
-## Purpose
+## Appendix A — Temporal Integrity & Truth Survivability
 
-This document defines the **v1 Signal Taxonomy** for **Signal Forge**, the Layer 2 component of AEGIS.
+This appendix defines how Signal Forge handles time, delay, and irreversible change to ensure that truth is not lost due to timing artifacts.
 
-Signal Forge transforms deterministic observations (`EVT:*`) from the Observation Plane into **bounded governance signals**.
-
-Signals are:
-- structured
-- deterministic
-- evidence-referenced
-- non-narrative
-- non-accusatory
-
-Signals are **not alerts** and **not decisions**.  
-They indicate that governance-relevant conditions exist and warrant human awareness or further interpretation.
+Signal Forge prioritizes **truth survivability over timeliness**.
 
 ---
 
-## Signal Forge Scope
+### A.1 Time Domains
 
-Signal Forge:
-- correlates normalized events over time windows
-- evaluates invariants, baselines, and attribution completeness
-- emits signals when defined conditions are met
+Signal Forge operates across four distinct time domains:
 
-Signal Forge does **not**:
-- infer intent
-- assign blame
-- enforce policy
-- initiate remediation
-- generate narrative explanation
+#### Event Time
+The timestamp at which the observed action or condition occurred in the source system.
 
-Interpretation of signals is explicitly delegated to **Aurora Analytics** or humans.
+- Recorded within `EVT:*`
+- May arrive late or out of order
+- Represents when reality happened
 
----
+#### Ingestion Time
+The timestamp at which the Observation Plane recorded the event.
 
-## EVT — Normalized Event
+- Always greater than or equal to Event Time
+- Represents when AEGIS became aware
 
-`EVT:*` references represent normalized, deterministic observations captured by the Observation Plane.
+#### Correlation Window
+The analytic time window used to evaluate patterns and thresholds.
 
-EVTs:
-- describe that something occurred
-- are timestamped
-- are scoped to one or more entities (host, user, service)
-- may reference evidence artifacts
+- Sliding windows (e.g., 5m, 1h, 24h)
+- Used for pattern detection only
+- **Not** a gate for truth validity
 
-EVTs do **not**:
-- assert correctness
-- assert compliance
-- assert intent
-- contain narrative explanation
+#### Preservation Horizon
+The time span during which preservation of evidence remains relevant.
 
-Signals are derived exclusively from EVT sequences and evidence references.
+- Always longer than correlation windows
+- Anchored to irreversible change, not signal emission
+- Defines how far back context must be considered before destructive actions
 
 ---
 
-## Signal Structure (Conceptual)
+### A.2 Principle: No Single Time Window May Gate Truth
 
-Each signal emitted by Signal Forge includes:
+Signal Forge enforces the following invariant:
 
-- `signal_type`
-- `time_window`
-- `entities` (host/user/service)
-- `risk_weight` (LOW | MED | HIGH)
-- `confidence` (LOW | MED | HIGH)
-- `evidence_refs[]`
-- optional `invariant_refs[]`
+> **No irreversible system change may rely on a single temporal window to preserve truth.**
 
----
-
-## Signal Definitions (v1)
-
-### 1. ANOMALY
-
-**Definition:**  
-Observed behavior deviates from established baseline patterns for the given entity or system.
-
-**Claims**
-- Observed behavior is unusual relative to historical norms.
-
-**Non-claims**
-- Does not claim fault, risk, or policy violation.
-- Does not claim intent.
-
-**Required evidence**
-- `EVT:*` references demonstrating deviation from baseline.
-
-**Typical triggers**
-- Sudden increase in privileged commands.
-- Service restarts outside normal windows.
-
-**Default risk guidance**
-- LOW → MED depending on scope and privilege.
+Operational implications:
+- Signals may be emitted retroactively
+- Late-arriving evidence remains valid
+- Missed detection does not imply absence of risk
+- Preservation decisions must consider historical context beyond immediate windows
 
 ---
 
-### 2. ATTRIBUTION_GAP
+### A.3 Late-Arriving Events
 
-**Definition:**  
-A governance-relevant action occurred without sufficient context to associate it with an approved or declared process artifact.
+Signal Forge explicitly supports **retrospective signaling**.
 
-**Claims**
-- Action occurred.
-- Attribution context is missing or incomplete.
+If an `EVT:*` arrives after the analytic window in which it would normally be evaluated:
 
-**Non-claims**
-- Does not claim maliciousness.
-- Does not claim policy violation unless paired with another signal.
+- The event is still processed based on its Event Time
+- Signals may be emitted with historical context
+- Signal timestamps reflect the original time window, not ingestion time
 
-**Required evidence**
-- `EVT:*` establishing the action.
-- Evidence showing missing context linkage.
+Example:
+- Storage degradation occurred prior to remediation
+- Evidence arrives after remediation
+- Signal Forge emits `SERVICE_HEALTH_DEGRADATION (historical)`
 
-**Typical triggers**
-- Config change with no associated change context.
-- Privileged command execution outside declared window.
+This behavior is intentional and correct.
 
-**Default risk guidance**
-- MED → HIGH depending on privilege and reversibility.
+Truth delayed is acceptable.  
+Truth lost is not.
 
 ---
 
-### 3. EVIDENCE_GAP
+### A.4 Preservation Horizon Semantics
 
-**Definition:**  
-A signal condition was detected, but required supporting evidence could not be resolved or validated.
+Preservation decisions must not depend solely on active signals.
 
-**Claims**
-- Evidence expected but unavailable.
+Before any **irreversible administrative action**, Signal Forge (or a preservation guard) must evaluate:
 
-**Non-claims**
-- Does not invalidate the observed event.
-- Does not imply concealment.
+- Recent `EVT:*` indicators within the preservation horizon
+- Prior signals related to the affected system or entity
+- Evidence gaps or attribution gaps within the horizon
 
-**Required evidence**
-- Reference to missing or unresolved evidence artifact.
+If risk indicators exist within the horizon:
+- `PRESERVATION_RECOMMENDED` may be emitted
+- `PRESERVATION_TRIGGERED` may be executed if configured
 
-**Typical triggers**
-- Log rotation removed required offset.
-- Evidence artifact inaccessible.
+Preservation may occur:
+- before signal emission
+- after signal emission
+- or retroactively based on late-arriving evidence
 
-**Default risk guidance**
-- MED when repeated or paired with other signals.
-
----
-
-### 4. INVARIANT_BREACH
-
-**Definition:**  
-A declared invariant was crossed based on available deterministic evidence.
-
-**Claims**
-- Invariant condition was violated.
-
-**Non-claims**
-- Does not claim malicious intent.
-- Does not prescribe response.
-
-**Required evidence**
-- `EVT:*` proving condition occurred.
-- `INVARIANT:*` reference.
-
-**Typical triggers**
-- Privileged identity created without required context.
-- Backup disabled on Tier-1 system.
-
-**Default risk guidance**
-- HIGH.
+Preservation captures **context**, not causality.
 
 ---
 
-### 5. PRESSURE_PATTERN
+### A.5 Missed Preservation as Evidence
 
-**Definition:**  
-Repeated exceptions or overrides indicate sustained operational pressure affecting governance posture.
+If an irreversible action occurs and preservation was not performed despite the presence of risk indicators:
 
-**Claims**
-- Repetition suggests normalization of exception behavior.
+This condition must not be silent.
 
-**Non-claims**
-- Does not assign blame.
-- Does not imply negligence.
+Signal Forge may emit:
+- `ATTRIBUTION_GAP`
+- `EVIDENCE_GAP`
+- or `INVARIANT_BREACH` (if preservation was required by policy)
 
-**Required evidence**
-- Multiple `EVT:*` across defined window.
+This records that:
+- a preservation opportunity existed
+- evidence context was reduced or lost
 
-**Typical triggers**
-- Frequent break-glass usage.
-- Repeated emergency changes.
+This is not a judgement of intent or fault.
 
-**Default risk guidance**
-- MED → HIGH when persistent.
+It is a record of lost observability.
 
 ---
 
-### 6. INTEGRITY_THINNING
+### A.6 Aurora Analytics and Time
 
-**Definition:**  
-Longitudinal patterns indicate gradual erosion of governance discipline.
+Aurora Analytics consumes Signal Forge outputs with full awareness of temporal context.
 
-**Claims**
-- Governance safeguards are weakening over time.
+Aurora must:
+- distinguish Event Time from Ingestion Time
+- acknowledge late-arriving evidence
+- explicitly state when conclusions are retrospective
+- prefer UNKNOWN over speculative reconstruction
 
-**Non-claims**
-- Does not assert wrongdoing.
-- Does not assert imminent failure.
+Aurora does not assume real-time omniscience.
 
-**Required evidence**
-- Historical EVT patterns.
-- Prior signals supporting trend.
-
-**Typical triggers**
-- Declining peer review frequency.
-- Reduced documentation over time.
-
-**Default risk guidance**
-- MED.
+Aurora communicates **temporal truth**, not immediacy.
 
 ---
 
-### 7. CONFIG_DRIFT
+### A.7 Failure Posture
 
-**Definition:**  
-Configuration state diverges from declared or expected baseline.
+When time-related ambiguity exists, Signal Forge must fail safely:
 
-**Claims**
-- Drift exists relative to baseline.
+- Emit fewer signals rather than speculative ones
+- Preserve evidence where possible
+- Record uncertainty explicitly
+- Avoid narrative reconstruction
 
-**Non-claims**
-- Does not claim incorrectness.
-- Does not claim risk severity.
-
-**Required evidence**
-- Config diff evidence.
-- EVT referencing change.
-
-**Typical triggers**
-- Repeated systemd unit edits.
-- Untracked config modifications.
-
-**Default risk guidance**
-- MED.
+This ensures that timing artifacts degrade confidence, not integrity.
 
 ---
 
-### 8. SERVICE_HEALTH_DEGRADATION
+### A.8 Summary Invariant
 
-**Definition:**  
-Service health indicators show sustained degradation beyond transient fluctuation.
+Signal Forge is designed so that:
 
-**Claims**
-- Reliability trend is declining.
+- Time may delay awareness
+- Time may complicate interpretation
+- Time may reduce available evidence
 
-**Non-claims**
-- Does not assert root cause.
-
-**Required evidence**
-- Health EVT sequences.
-- Service state evidence.
-
-**Typical triggers**
-- Repeated restarts.
-- Increasing error rates.
-
-**Default risk guidance**
-- MED → HIGH depending on tier.
+But **time must never erase the existence of truth**.
 
 ---
 
-### 9. BACKUP_ROT
-
-**Definition:**  
-Backup mechanisms are failing or producing unreliable recovery artifacts.
-
-**Claims**
-- Backup integrity is compromised.
-
-**Non-claims**
-- Does not assert data loss has occurred.
-
-**Required evidence**
-- Backup job EVT failures.
-- Verification failure evidence.
-
-**Typical triggers**
-- Repeated backup failures.
-- Verification mismatches.
-
-**Default risk guidance**
-- HIGH.
-
----
-
-### 10. CAPACITY_RISK
-
-**Definition:**  
-System capacity trends indicate impending constraint or exhaustion.
-
-**Claims**
-- Capacity pressure is increasing.
-
-**Non-claims**
-- Does not assert immediate failure.
-
-**Required evidence**
-- Capacity EVT metrics over time.
-
-**Typical triggers**
-- Disk nearing exhaustion.
-- Memory pressure trends.
-
-**Default risk guidance**
-- MED → HIGH.
-
----
-
-### 11. PRESERVATION_TRIGGERED
-
-**Definition:**  
-Preservation actions were automatically initiated due to detected risk of irreversible change.
-
-**Claims**
-- Preservation threshold was crossed.
-- Evidence snapshot was taken.
-
-**Non-claims**
-- Does not assert incident severity.
-
-**Required evidence**
-- Preservation action EVT.
-- Triggering signal references.
-
-**Default risk guidance**
-- HIGH.
-
----
-
-### 12. PRESERVATION_RECOMMENDED
-
-**Definition:**  
-Conditions suggest preservation should occur before further action.
-
-**Claims**
-- Risk of evidence loss exists.
-
-**Non-claims**
-- Does not mandate preservation.
-
-**Required evidence**
-- EVT patterns indicating risk.
-
-**Typical triggers**
-- Rapid privileged changes.
-- Incident response conditions.
-
-**Default risk guidance**
-- MED.
-
----
-
-## Closing Notes
-
-- Signals are **inputs to governance**, not outputs of enforcement.
-- Signal Forge must always prefer **UNKNOWN** over speculation.
-- Narrative interpretation is explicitly delegated to Aurora Analytics.
-
-This taxonomy defines what Signal Forge may emit — nothing more.
 
