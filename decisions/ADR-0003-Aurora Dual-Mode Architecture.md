@@ -9,17 +9,17 @@
 
 ## Context
 
-As AEGIS has evolved, Aurora’s role has clarified into two distinct operational realities:
+As AEGIS has evolved, Aurora’s role has clarified into two fundamentally different operational responsibilities:
 
-1. A **passive, ambient system presence** that surfaces governance-relevant conditions.
-2. An **explicitly invoked, interactive intelligence** that assists humans in exploring unknowns.
+1. A **passive, ambient presence** that continuously surfaces governance-relevant conditions.
+2. An **explicitly invoked, interactive intelligence** that assists humans in exploring uncertainty and unknowns.
 
-Conflating these roles introduces significant risk:
+Conflating these responsibilities introduces unacceptable risk:
 - speculative reasoning may be mistaken for truth
-- discovery may leak into governance
-- trust boundaries may erode
+- discovery output may bleed into governance signals
+- trust boundaries between human and system may erode
 
-This decision formalizes a dual-mode architecture for Aurora to preserve clarity, trust, and long-term system integrity.
+This decision formalizes a dual-mode architecture for Aurora to preserve system integrity, operator trust, and long-term governability.
 
 ---
 
@@ -27,49 +27,60 @@ This decision formalizes a dual-mode architecture for Aurora to preserve clarity
 
 Aurora SHALL operate in two explicitly distinct modes:
 
-### 1. **Aurora Analytics** (The Sun)
+---
 
-Aurora Analytics is the **ambient, non-interactive presence** of Aurora within AEGIS.
+### 1. **Aurora Sentinel**
 
-It:
-- consumes outputs from Signal Forge
-- presents structured, bounded interpretations
-- produces Signal Cards, digests, and escalation packets
-- operates continuously or on schedule
+Aurora Sentinel is the **ambient, non-interactive guardian presence** of Aurora within AEGIS.
+
+Aurora Sentinel:
+- continuously consumes outputs from **Signal Forge**
+- presents structured, bounded interpretations of signals
+- produces digests, signal cards, and escalation artifacts
+- operates on schedule or continuously
 - does not speculate
 - does not explore
 - does not initiate dialogue
 
-Aurora Analytics:
+Aurora Sentinel:
 - reveals what is already known
-- communicates temporal truth and uncertainty
+- communicates uncertainty explicitly
 - prefers UNKNOWN over assumption
 - never acts without evidence
+- never alters governance state
 
-Aurora Analytics exists whether or not a human is present.
+Aurora Sentinel exists whether or not a human is present.
+
+It watches.  
+It signals.  
+It does not decide.
 
 ---
 
-### 2. **Aurora Discovery** (The Flashlight)
+### 2. **Aurora Inquest**
 
-Aurora Discovery is the **explicitly invoked, interactive intelligence** mode.
+Aurora Inquest is the **explicitly invoked, human-guided inquiry mode**.
 
-It:
-- is initiated by a human
-- operates within a bounded session
+Aurora Inquest:
+- is initiated intentionally by a human
+- operates within a bounded, session-scoped context
 - explores ambiguity and unknowns
 - asks clarifying questions
 - reasons, hypothesizes, and explains
-- may reference evidence *when provided*
+- may reference evidence when explicitly provided
 
-Aurora Discovery:
+Aurora Inquest:
 - is exploratory, not authoritative
 - produces provisional understanding
-- does not emit signals
+- does not emit or modify signals
 - does not alter governance state
-- does not persist output unless explicitly instructed
+- does not persist outputs unless explicitly instructed
 
-Aurora Discovery exists only when summoned.
+Aurora Inquest exists only when summoned.
+
+It investigates.  
+It reasons.  
+It does not govern.
 
 ---
 
@@ -79,53 +90,57 @@ Aurora Discovery exists only when summoned.
 
 This rule is absolute.
 
+No feature, shortcut, or future enhancement may violate this boundary.
+
 ---
 
 ## Explicit Non-Goals
 
-Aurora Discovery SHALL NOT:
+Aurora Inquest SHALL NOT:
 - autonomously influence Signal Forge
-- emit or modify signals
+- emit or modify governance signals
 - silently persist findings
 - act as background monitoring
-- be treated as an audit source
+- be treated as an audit or enforcement authority
 
-Aurora Analytics SHALL NOT:
+Aurora Sentinel SHALL NOT:
 - ask questions
 - speculate about intent
 - reconstruct missing evidence
 - engage in open-ended dialogue
-- replace human judgement
+- replace human judgment
 
 ---
 
 ## Rationale
 
-Separating these modes:
+Separating Aurora into **Sentinel** and **Inquest** modes:
 
-- preserves trust by preventing speculative reasoning from being mistaken as truth
+- preserves trust by preventing speculation from being mistaken as truth
 - allows deep, meaningful discovery without governance risk
 - keeps Signal Forge deterministic and auditable
-- enables Aurora to assist humans without becoming an authority
+- ensures humans remain the final authority
+- enables Aurora to assist without becoming an actor
 
-This distinction mirrors real-world roles:
-- governance systems illuminate conditions
-- humans explore causes and meaning
+This mirrors real-world governance:
+- sentinels observe and warn
+- inquiries seek understanding
+- judgments are made elsewhere
 
 ---
 
 ## Consequences
 
 ### Positive
-- Clear scope boundaries
+- Clear scope and responsibility boundaries
 - Reduced risk of AI overreach
-- Stronger operator trust
-- Easier regulatory and audit explanations
-- Discovery can go deeper without widening scope
+- Stronger operator and leadership trust
+- Easier audit, compliance, and regulatory explanation
+- Discovery can deepen without expanding authority
 
 ### Trade-offs
 - Two interaction models must be maintained
-- Some duplication of context loading may occur
+- Context loading may be duplicated between modes
 - Discovery output requires explicit promotion to governance artifacts
 
 These trade-offs are intentional and acceptable.
@@ -134,9 +149,9 @@ These trade-offs are intentional and acceptable.
 
 ## Future Considerations (Deferred)
 
-- Explicit UX affordances distinguishing Analytics vs Discovery
-- Session isolation and audit controls for Discovery
-- Optional “promote to evidence” workflows with human approval
+- UX affordances distinguishing Sentinel vs Inquest
+- Session isolation and audit controls for Inquest
+- Human-approved workflows to promote discovery output into evidence or context
 
 No future work may violate the Core Boundary Rule.
 
@@ -145,9 +160,10 @@ No future work may violate the Core Boundary Rule.
 ## Summary
 
 Aurora is both:
-- **the sun**, illuminating the kingdom continuously
-- **the flashlight**, pointed by a human into the unknown
 
-These roles are complementary—but must never be merged.
+- **a Sentinel** — watching continuously, signaling conditions, preserving truth
+- **an Inquest** — invoked deliberately, exploring uncertainty, aiding understanding
 
-This decision ensures Aurora remains trustworthy, useful, and governable as AEGIS grows.
+These roles are complementary but must never be merged.
+
+This decision ensures Aurora remains trustworthy, useful, and governable as AEGIS evolves.
