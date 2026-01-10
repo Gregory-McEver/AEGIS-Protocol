@@ -49,3 +49,6 @@ Improper transitions emit DriftWatch.
 
 - Language interpretation  
 - Tool execution
+
+This component respects the UNKNOWN propagation invariant
+(see governance/UNKNOWN_PROPAGATION.md).
