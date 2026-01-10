@@ -48,8 +48,9 @@ Goal: understand correction, not blame.
 
 ## 5) Where Everything Is Mapped
 
-- `10_PROTOCOL_INDEX.md`
-
+Canonical map of the protocol:  
+[10_PROTOCOL_INDEX.md](10_PROTOCOL_INDEX.md)
+_If a file moves or is renamed, the index is updated first._
 Goal: navigate the full protocol by topic.
 
 ---
