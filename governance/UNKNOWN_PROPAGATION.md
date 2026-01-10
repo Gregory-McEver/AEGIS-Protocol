@@ -2,6 +2,10 @@
 
 Status: DRAFT — binding invariant; elaboration pending.
 
+> **Canonical reference:** `governance/UNKNOWN_PROPAGATION.md`  
+> This document describes subsystem-level integration details.
+
+
 Purpose:
 Preserves uncertainty as a first-class outcome. Prevents forced certainty when evidence is missing, ambiguous, or unverifiable.
 
