@@ -114,3 +114,72 @@ Examples and scenarios referenced in this repo are **Beta-safe** and do not assu
 
 ## Repository Structure
 
+Protocol/
+├── Authority Envelopes
+├── Shadow Zones
+├── Evidence vs Inference
+├── Human-in-the-Loop
+├── Authority Drift
+├── Operational Contracts
+├── Alpha / Beta Exit Gates
+└── Compliance Criteria
+
+
+Each document is designed to stand alone while remaining consistent with the overall protocol.
+
+---
+
+## How to Read This Repo (Suggested Order)
+
+If you are new to AEGIS:
+
+1. Start with **Authority Envelopes**
+2. Read **Evidence vs Inference**
+3. Review **Shadow Zones**
+4. Understand **Human-in-the-Loop Enforcement**
+5. Finish with **Authority Drift**
+
+This order mirrors how real systems fail — and how AEGIS prevents it.
+
+---
+
+## Who AEGIS Is For
+
+AEGIS is designed for:
+
+- Engineers building AI into real systems
+- Operators responsible for production outcomes
+- Security and governance-minded teams
+- Homelab and self-hosted practitioners who value control
+- Anyone who believes AI should **support judgment, not replace it**
+
+---
+
+## Philosophy
+
+> AI should elevate human judgment — not bypass it.
+
+AEGIS treats AI as a **participant in accountability**, not an authority.
+
+---
+
+## Status
+
+- Phase: **Beta**
+- Stability: **Specification stable, implementation evolving**
+- Public Repo: **Documentation & protocol only**
+
+---
+
+## License
+
+See `LICENSE` for details.
+
+---
+
+## Contact
+
+For discussion, questions, or collaboration:
+- Use the **Discord link on my GitHub profile**
+
+Public issues are welcome for **protocol clarification**, not implementation requests.
