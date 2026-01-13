@@ -115,14 +115,14 @@ Examples and scenarios referenced in this repo are **Beta-safe** and do not assu
 ## Repository Structure
 
 Protocol/
-├── Authority Envelopes
-├── Shadow Zones
-├── Evidence vs Inference
-├── Human-in-the-Loop
-├── Authority Drift
-├── Operational Contracts
-├── Alpha / Beta Exit Gates
-└── Compliance Criteria
+- Authority Envelopes
+- Shadow Zones
+- Evidence vs Inference
+- Human-in-the-Loop
+- Authority Drift
+- Operational Contracts
+- Alpha / Beta Exit Gates
+- Compliance Criteria
 
 
 Each document is designed to stand alone while remaining consistent with the overall protocol.
